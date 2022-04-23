@@ -19,15 +19,12 @@ const RedirectUser = (props) => {
         localStorage.setItem("accessToken", cookies.get("accessToken"))
         cookies.remove("accessToken", { path: "/", domain: "localhost" })
 
-        axios.get('/nias/navigation-bar-data').then( res => {
-            console.log(res.data, 'navigationBarData')
-            dispatch(setNavigationBarData(res.data))
-            dispatch(setShowEntitySearchCount(1));
-
-            axios.get('/user/get-user-data').then( res => {
-                console.log(res.data, 'userData')
-                dispatch(setUserData(res.data))
-                navigate('/', );
+        axios.get('/user/get-user-data').then( res => {
+            dispatch(setUserData(res.data));
+            axios.get('/nias/navigation-bar-data').then( res => {
+                dispatch(setNavigationBarData(res.data));
+                dispatch(setShowEntitySearchCount(1));
+                navigate("/");
             })
         })
     }, [])
