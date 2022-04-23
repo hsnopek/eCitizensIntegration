@@ -1,0 +1,167 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- edited with XMLSpy v2018 sp1 (x64) (http://www.altova.com) by mstanic1 (Financijska agencija) -->
+<xs:schema xmlns="http://eovlastenja.fina.hr/roJipsApi/v2" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:abase="http://eovlastenja.fina.hr/authorizationbase/v2" xmlns:apiBase="http://eovlastenja.fina.hr/roBaseApi/v2" targetNamespace="http://eovlastenja.fina.hr/roJipsApi/v2" elementFormDefault="qualified" attributeFormDefault="unqualified">
+	<xs:import namespace="http://eovlastenja.fina.hr/authorizationbase/v2" schemaLocation="../BaseElementsSchema/AuthorizationBaseElementsV2.xsd"/>
+	<xs:import namespace="http://eovlastenja.fina.hr/roBaseApi/v2" schemaLocation="RoBaseApiSchemaV2.xsd"/>
+	<xs:element name="JipsOibsItems" type="JipsOibsItemsType"/>
+	<xs:element name="GetAllJipsOibsResponse" type="GetAllJipsOibsResponseType"/>
+	<xs:element name="GetAllJipsOibsRequest" type="GetAllJipsOibsRequestType"/>
+	<xs:element name="GetJipsOibsChangesRequest" type="GetJipsOibsChangesRequestType"/>
+	<xs:element name="GetJipsOibsChangesResponse" type="GetJipsOibsChangesResponseType"/>
+	<xs:element name="GetPersonOibsForJipsesRequest" type="GetPersonOibsForJipsesRequestType"/>
+	<xs:element name="GetPersonOibsForJipsesResponse" type="GetPersonOibsForJipsesResponseType"/>
+	<!--Upit za dohvat OIB-e vlasnika za željene JIPS-ove-->
+	<xs:complexType name="GetPersonOibsForJipsesRequestType">
+		<xs:annotation>
+			<xs:documentation>Upit za dohvat OIB-e vlasnika za željene JIPS-ove</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="Jipses">
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element name="Jips" type="abase:JipsType" minOccurs="1" maxOccurs="unbounded"/>
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+		</xs:sequence>
+		<xs:attribute name="Id" type="xs:ID" use="required"/>
+	</xs:complexType>
+	<!--Za tražene JIPS-ove vraća natrag listu OIB-a vlasnika-->
+	<xs:complexType name="GetPersonOibsForJipsesResponseType">
+		<xs:annotation>
+			<xs:documentation>Za tražene JIPS-ove vraća natrag listu OIB-a vlasnika</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="Result" type="PersonOibsForJipsesType" minOccurs="1" maxOccurs="unbounded"/>
+		</xs:sequence>
+		<xs:attribute name="Id" type="xs:ID" use="required"/>
+		<xs:attribute name="ForRequestId" type="xs:string" use="required"/>
+	</xs:complexType>
+	<!--Za traženi JIPS-ove sadrži listu OIB-a vlasnika-->
+	<xs:complexType name="PersonOibsForJipsesType">
+		<xs:annotation>
+			<xs:documentation>Za traženi JIPS-ove sadrži listu OIB-a vlasnika</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<!--JIPS iz zahtjeva-->
+			<xs:element name="Jips" type="abase:JipsType"/>
+			<xs:element name="Oibs">
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element name="Oib" type="abase:OibType" minOccurs="0" maxOccurs="unbounded"/>
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+			<xs:element name="Errors" type="abase:ErrorsType"/>
+		</xs:sequence>
+	</xs:complexType>
+	<!--Za određeni JIPS sadrži listu OIB-a vlasnika-->
+	<xs:complexType name="JipsOibsResponseItemType">
+		<xs:annotation>
+			<xs:documentation>Za određeni JIPS sadrži listu OIB-a vlasnika ili grešku ako nije pronađeno i sl.</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="Changes" type="JipsOibsItemType" minOccurs="0" maxOccurs="unbounded"/>
+			<!--Ima li još zapisa-->
+			<xs:element name="HasMore" type="xs:boolean"/>
+		</xs:sequence>
+	</xs:complexType>
+	<!--Upit za dohvat promjena OIB-a vlasnika Poslovnih Subjekata-->
+	<xs:complexType name="GetJipsOibsChangesRequestType">
+		<xs:annotation>
+			<xs:documentation>Upit za dohvat promjena OIB-a vlasnika Poslovnih Subjekata</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="FromDate" type="xs:dateTime"/>
+			<xs:element name="Take" type="xs:int"/>
+		</xs:sequence>
+		<xs:attribute name="Id" type="xs:ID" use="required"/>
+	</xs:complexType>
+	<!--Odgovor sa promjenama OIB-a vlasnika od traženog vremena. Sadrži i nove zapise uz promjene.-->
+	<xs:complexType name="GetJipsOibsChangesResponseType">
+		<xs:annotation>
+			<xs:documentation>Odgovor sa promjenama OIB-a vlasnika od traženog vremena. Sadrži i nove zapise uz promjene.</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="Changes" >
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element name="Change" type="JipsOibsItemChangeType" minOccurs="0" maxOccurs="unbounded"/>
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+			<!--Ima li još zapisa-->
+			<xs:element name="HasMore" type="xs:boolean"/>
+		</xs:sequence>
+		<xs:attribute name="Id" type="xs:ID" use="required"/>
+		<xs:attribute name="ForRequestId" type="xs:string" use="required"/>
+	</xs:complexType>
+	<!--Za određeni JIPS sadrži listu OIB-a vlasnika-->
+	<xs:complexType name="JipsOibsItemChangeType">
+		<xs:annotation>
+			<xs:documentation>Opisuje promjenu OIB-a vlasnika kod PS-a.</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="ChangedTime" type="xs:dateTime"/>
+			<xs:element name="ChangeType" type="JipsOibsItemChangeEnumType"/>
+			<xs:element name="Jips" type="abase:JipsType"/>
+			<xs:element name="Oibs">
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element name="Oib" type="abase:OibType" minOccurs="0" maxOccurs="unbounded"/>
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+		</xs:sequence>
+	</xs:complexType>
+	<!--Tip promjene-->
+	<xs:simpleType name="JipsOibsItemChangeEnumType">
+		<xs:restriction base="xs:string">
+			<xs:enumeration value="Modify"/>
+			<xs:enumeration value="Created"/>
+			<xs:enumeration value="Deactivated"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<!--Upit za dohvat željene stranice sa listom oib-ova vlasnika-->
+	<xs:complexType name="GetAllJipsOibsRequestType">
+		<xs:annotation>
+			<xs:documentation>Upit za dohvat željene stranice sa listom oib-ova vlasnika</xs:documentation>
+		</xs:annotation>
+		<xs:complexContent>
+			<xs:extension base="apiBase:PageRequestType">
+				<xs:attribute name="Id" type="xs:ID" use="required"/>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<!--Odgovor sa popisom svih OIB-ova vlasnika PS-a-->
+	<xs:complexType name="GetAllJipsOibsResponseType">
+		<xs:annotation>
+			<xs:documentation>Odgovor jedne stranice od kompletnog popisa svih OIB-ova vlasnika PS-a</xs:documentation>
+		</xs:annotation>
+		<xs:complexContent>
+			<xs:extension base="apiBase:PageResponseType">
+				<xs:attribute name="Id" type="xs:ID" use="required"/>
+				<xs:attribute name="ForRequestId" type="xs:string" use="required"/>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<!--Stranica sa zapisima o OIB-ima vlasnika PS-ova-->
+	<xs:complexType name="JipsOibsItemsType">
+		<xs:annotation>
+			<xs:documentation>Stranica sa zapisima o OIB-ima vlasnika PS-ova</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="Item" type="JipsOibsItemType" minOccurs="0" maxOccurs="unbounded"/>
+		</xs:sequence>
+	</xs:complexType>
+	<!--Za određeni JIPS sadrži listu OIB-a vlasnika-->
+	<xs:complexType name="JipsOibsItemType">
+		<xs:annotation>
+			<xs:documentation>Za određeni JIPS sadrži listu OIB-a vlasnika.</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="Jips" type="abase:JipsType"/>
+			<xs:element name="Oib" type="abase:OibType" minOccurs="0" maxOccurs="unbounded"/>
+		</xs:sequence>
+	</xs:complexType>
+</xs:schema>

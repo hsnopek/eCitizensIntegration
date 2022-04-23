@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns="http://eovlastenja.fina.hr/roBaseApi/v2" xmlns:xs="http://www.w3.org/2001/XMLSchema" targetNamespace="http://eovlastenja.fina.hr/roBaseApi/v2" elementFormDefault="qualified" attributeFormDefault="unqualified">
+	
+	<xs:element name="PageRequest" type="PageRequestType" />
+	<xs:element name="PageResponse" type="PageResponseType" />
+	
+	<!--Upit za dohvat željene stranice sa listom oib-ova vlasnika-->
+	<xs:complexType name="PageRequestType">
+		<xs:sequence>
+			<xs:element name="Page" type="xs:int"/>
+		</xs:sequence>
+	</xs:complexType>
+	
+	
+	<!--Odgovor sa popisom svih OIB-ova vlasnika PS-a-->
+	<xs:complexType name="PageResponseType">
+		<xs:sequence>
+			<!--Sadrži GZIP xml elementa V1ToV2JipsMapItemsType u base64 formatu-->
+			<xs:element name="PageContentXmlGZipBase64" type="xs:base64Binary"/>
+			<!--
+				Vrijeme ažurnosti zapisa, 
+				za precizniji info može se dohvatiti razlike od ovog vremena na dalje 
+				posebnom metodom koja će dati samo razlike. 
+				Sve stranice imaju isto vrijeme usklađivanja, 
+				po tome se može pratiti ako je došlo do izmjene u međuvremenu, 
+				od prve do zadnje stranice
+			-->
+			<xs:element name="PageLastUpdate" type="xs:dateTime"/>
+			<!--Tražena stranica-->
+			<xs:element name="CurrentPage" type="xs:int"/>
+			<!--Koliko ukupno ima stranica-->
+			<xs:element name="TotalPages" type="xs:int"/>
+			<!--Maximalni moguć broj zapisa po stranici-->
+			<xs:element name="MaxPageRecords" type="xs:int"/>
+			<!--Broj zapisa/sadržaja-->
+			<xs:element name="ContentCount" type="xs:int"/>
+		</xs:sequence>
+	</xs:complexType>
+	
+	
+	
+	
+	
+</xs:schema>

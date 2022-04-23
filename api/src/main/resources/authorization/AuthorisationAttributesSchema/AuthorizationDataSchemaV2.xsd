@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- edited with XMLSpy v2017 sp2 (x64) (http://www.altova.com) by jstavalj (Financijska agencija) -->
+<xs:schema xmlns="http://eovlastenja.fina.hr/authorizationitems/v2" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:abase="http://eovlastenja.fina.hr/authorizationbase/v2" targetNamespace="http://eovlastenja.fina.hr/authorizationitems/v2" elementFormDefault="qualified" attributeFormDefault="unqualified">
+	<xs:import namespace="http://eovlastenja.fina.hr/authorizationbase/v2" schemaLocation="../BaseElementsSchema/AuthorizationBaseElementsV2.xsd"/>
+	<xs:element name="AuthorizationDataLegalFor" type="AuthorizationDataLegalForType"/>
+	<xs:element name="AuthorizationData" type="AuthorizationDataType"/>
+	<xs:element name="AuthorizationItem" type="AuthorizationItemType"/>
+	<xs:complexType name="AuthorizationDataLegalForType">
+		<xs:annotation>
+			<xs:documentation>
+                e-Punomoći vezane uz Poslovni Subjekt
+            </xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="Legal" type="abase:LegalType"/>
+			<xs:element name="Authorizations" type="AuthorizationsType"/>
+			<xs:element name="Errors" type="abase:ErrorsType"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="AuthorizationDataType">
+		<xs:annotation>
+			<xs:documentation>
+                Podaci o role based autorizacijama
+            </xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="Person" type="abase:PersonType"/>
+			<xs:element name="Authorizations" type="AuthorizationsType"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="AuthorizationsType">
+		<xs:annotation>
+			<xs:documentation>
+                Sadrži listu autorizacijskih podataka
+            </xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="AuthorizationItem" type="AuthorizationItemType" minOccurs="0" maxOccurs="unbounded"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="AuthorizationItemType">
+		<xs:annotation>
+			<xs:documentation>
+                Podaci o pojedinoj autorizaciji za korisnika
+            </xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="CertificateDn" type="xs:string" minOccurs="0" maxOccurs="1"/>
+			<xs:element name="LegalPersonTo" type="abase:LegalType" minOccurs="0" maxOccurs="1"/>
+			<xs:element name="PersonTo" type="abase:PersonType" minOccurs="0" maxOccurs="1"/>
+			<xs:element name="PermissionsFor" type="PermissionsForType"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="PermissionsForType">
+		<xs:annotation>
+			<xs:documentation>
+               Lista ovlaštenja koja korisnik posjeduje
+            </xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="PermissionForItem" type="PermissionForItemType" minOccurs="0" maxOccurs="unbounded"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="PermissionForItemType">
+		<xs:annotation>
+			<xs:documentation>
+               Pojedino ovlaštenje koje korisnik posjeduje za određenu osobu, tj. podaci koji se nalaze unutar jednog dokumenta ovlaštenja 
+            </xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="EntityFor" type="abase:PersonOrLegalType"/>
+			<xs:element name="Permissions" type="PermissionsType"/>
+		</xs:sequence>
+		<xs:attribute name="AuthValidUntilUtc" type="xs:dateTime"/>
+	</xs:complexType>
+	<xs:complexType name="PermissionsType">
+		<xs:annotation>
+			<xs:documentation>
+				 Lista ovlaštenja, rola, atributa koje se nalaze u podjedinom dokuemntu ovlaštenja
+            </xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="Permission" type="PermissionType" minOccurs="0" maxOccurs="unbounded"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="PermissionType">
+		<xs:annotation>
+			<xs:documentation>
+				Pojedino ovlaštenja, rola ili atribut
+            </xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="Key" type="xs:string"/>
+			<xs:element name="Value" type="xs:string"/>
+			<xs:element name="Description" type="xs:string" minOccurs="0" maxOccurs="1"/>
+		</xs:sequence>
+	</xs:complexType>
+</xs:schema>

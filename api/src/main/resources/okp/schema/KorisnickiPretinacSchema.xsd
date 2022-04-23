@@ -1,0 +1,172 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<schema xmlns="http://www.w3.org/2001/XMLSchema"
+		targetNamespace="http://apis-it.hr/umu/2013/types/kp"
+	    xmlns:tns="http://apis-it.hr/umu/2013/types/kp"
+	    elementFormDefault="qualified"
+        version="2.0">
+
+	<element name="KorisnickiPretinacPoruka" type="tns:KorisnickiPretinacPorukaType"/>
+	<element name="Odgovor" type="tns:OdgovorType"/>
+
+	<complexType name="KorisnickiPretinacPorukaType">
+		<sequence>
+			<element name="Zaglavlje" type="tns:ZaglavljeType" minOccurs="1" maxOccurs="1"/>
+			<element name="Poruka" type="tns:PorukaType" minOccurs="1" maxOccurs="1"/>
+			<element name="Privici" type="tns:PriviciType" minOccurs="0" maxOccurs="1"/>
+		</sequence>
+	</complexType>
+
+	<complexType name="OdgovorType">
+		<sequence>
+			<element name="IdPorukePosiljatelja" type="tns:UUIDType" minOccurs="0" maxOccurs="1"/>
+			<element name="DatumVrijemeObrade" type="dateTime" minOccurs="0" maxOccurs="1"/>
+			<element name="Greske" type="tns:GreskeType" minOccurs="0" maxOccurs="1"/>
+		</sequence>
+	</complexType>
+
+
+	<complexType name="ZaglavljeType">
+		<sequence>
+			<element name="IdPosiljatelja" type="tns:PosiljateljIdType" minOccurs="1" maxOccurs="1" />
+            <element name="TipPoruke" type="tns:TipPorukeType" minOccurs="1" maxOccurs="1"/>
+			<element name="IdPoruke" type="tns:UUIDType" minOccurs="1" maxOccurs="1"/>
+			<element name="DatumVrijemeSlanja" type="dateTime" minOccurs="1" maxOccurs="1"/>
+			<element name="RazinaSigurnosti" minOccurs="1" maxOccurs="1">
+				<simpleType>
+					<restriction base="string">
+						<minLength value="1"/>
+						<maxLength value="1"/>
+					</restriction>
+				</simpleType>
+			</element>
+		</sequence>
+	</complexType>
+
+	<complexType name="PorukaType">
+		<sequence>
+			<element name="PinPrimatelja" type="tns:PinType" minOccurs="1" maxOccurs="1"/>
+			<element name="OznakaDrzave" minOccurs="1" maxOccurs="1">
+				<annotation>
+					<documentation>
+						Oznaka države prema šifarniku. Za hrvatske građane oznaka HR
+					</documentation>
+				</annotation>
+				<simpleType>
+					<restriction base="string">
+						<minLength value="2"/>
+						<maxLength value="2"/>
+					</restriction>
+				</simpleType>
+			</element>
+			<element name="Predmet" minOccurs="1" maxOccurs="1">
+				<simpleType>
+					<restriction base="string">
+						<minLength value="1"/>
+						<maxLength value="200"/>
+					</restriction>
+				</simpleType>
+			</element>
+			<element name="Sadrzaj" minOccurs="1" maxOccurs="1">
+				<simpleType>
+					<restriction base="string">
+						<minLength value="1"/>
+						<maxLength value="2000"/>
+					</restriction>
+				</simpleType>
+			</element>
+		</sequence>
+	</complexType>
+
+	<complexType name="PriviciType">
+		<sequence>
+			<element name="Privitak" type="tns:PrivitakType" minOccurs="1" maxOccurs="unbounded"/>
+		</sequence>
+	</complexType>
+
+	<complexType name="PrivitakType">
+		<sequence>
+			<element name="Naziv" type="string" minOccurs="1" maxOccurs="1"/>
+			<element name="MimeType" type="string" minOccurs="1" maxOccurs="1" />
+			<element name="Opis" type="string" minOccurs="0" maxOccurs="1">
+				<annotation>
+					<documentation>
+						Optional document description. Max lenght 255
+						characters.
+	        </documentation>
+				</annotation>
+			</element>
+			<element name="Data" minOccurs="1" maxOccurs="1">
+				<complexType mixed="true">
+					<sequence minOccurs="0" maxOccurs="unbounded">
+						<any namespace="##any" processContents="lax" />
+					</sequence>
+					<attribute name="encoding" use="required">
+						<simpleType>
+							<restriction base="string">
+								<enumeration value="EMBEDDED" />
+								<enumeration value="BASE64" />
+							</restriction>
+						</simpleType>
+					</attribute>
+					<anyAttribute namespace="##any" />
+				</complexType>
+			</element>
+		</sequence>
+	</complexType>
+
+	<complexType name="GreskeType">
+		<sequence>
+			<element name="Greska" type="tns:GreskaType" minOccurs="1" 	maxOccurs="unbounded" />
+		</sequence>
+	</complexType>
+
+	<complexType name="GreskaType">
+		<sequence>
+			<element name="SifraGreske" type="tns:SifraGreskeType" minOccurs="1" maxOccurs="1" />
+			<element name="OpisGreske" type="tns:OpisGreskeType" minOccurs="1" maxOccurs="1" />
+		</sequence>
+	</complexType>
+
+	<simpleType name="SifraGreskeType">
+		<restriction base="string">
+			<pattern value="s[0-9]{3}" />
+		</restriction>
+	</simpleType>
+
+	<simpleType name="OpisGreskeType">
+		<restriction base="string">
+			<maxLength value="500" />
+		</restriction>
+	</simpleType>
+
+
+	<simpleType name="PosiljateljIdType">
+		<restriction base="string">
+			<minLength value="1" />
+			<maxLength value="9" />
+			<pattern value="[0-9]+" />
+		</restriction>
+	</simpleType>
+
+	<simpleType name="PinType">
+		<restriction base="string">
+			<minLength value="1" />
+			<maxLength value="20" />
+			<pattern value="[0-9]+" />
+		</restriction>
+	</simpleType>
+
+	<simpleType name="UUIDType">
+		<restriction base="string">
+			<pattern
+				value="[a-f0-9]{8}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{12}" />
+		</restriction>
+	</simpleType>
+
+    <simpleType name="TipPorukeType">
+      <restriction base="integer">
+        <minInclusive value="0"/>
+      </restriction>
+    </simpleType>
+
+</schema>

@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- edited with XMLSpy v2018 sp1 (x64) (http://www.altova.com) by mstanic1 (Financijska agencija) -->
+<xs:schema xmlns="http://eovlastenja.fina.hr/authorizationdocument/v3" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:abase="http://eovlastenja.fina.hr/authorizationbase/v2" targetNamespace="http://eovlastenja.fina.hr/authorizationdocument/v3" elementFormDefault="qualified" attributeFormDefault="unqualified">
+	<xs:import namespace="http://eovlastenja.fina.hr/authorizationbase/v2" schemaLocation="../BaseElementsSchema/AuthorizationBaseElementsV2.xsd"/>
+	<!--Root element zahtjeva za novi dokument eovlaštenja-->
+	<xs:element name="ServiceRequest" type="ServiceRequestType"/>
+	<!--Zahtjev za kreiranje novog dokumenta ovlaštenja-->
+	<xs:complexType name="ServiceRequestType">
+		<xs:sequence>
+			<xs:element name="AuthorizationInfo" type="AuthorizationInfoType"/>
+			<xs:element name="TemplateInfo" type="TemplateInfoType"/>
+			<xs:element name="Signatures" type="abase:SignaturesType" minOccurs="0" maxOccurs="1"/>
+		</xs:sequence>
+		<xs:attribute name="Id" type="xs:ID" use="required"/>
+		<xs:attribute name="ExpiryTime" type="xs:dateTime" use="required"/>
+	</xs:complexType>
+	<!--Informacije vezane za generiranje izgleda dokumenta, koji je pravni tip dokumenta, radi li korisnik direktno ili preneseno, radi li referent-->
+	<xs:complexType name="TemplateInfoType">
+		<xs:sequence>
+			<xs:element name="LegalDocumentType" type="LegalDocumentTypeEnum"/>
+			<xs:element name="IsDirect" type="xs:boolean"/>
+			<xs:element name="IsReferent" type="xs:boolean"/>
+		</xs:sequence>
+	</xs:complexType>
+	<!--Pravni tip dokumenta-->
+	<xs:simpleType name="LegalDocumentTypeEnum">
+		<xs:restriction base="xs:string">
+			<xs:enumeration value="IZJAVA"/>
+			<xs:enumeration value="PUNOMOC"/>
+			<xs:enumeration value="PRISTUP"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<!--podaci autorizacijskog dokumenta, tko kome daje pravo i u čije ime, za koju uslugu, i koja prava-->
+	<xs:complexType name="AuthorizationInfoType">
+		<xs:sequence>
+			<xs:element name="ServiceSubjectName" type="xs:string"/>
+			<xs:element name="FromEntity" type="FromEntityType"/>
+			<xs:element name="ForEntity" type="abase:PersonOrLegalType"/>
+			<xs:element name="ToEntity" type="ToEntityType"/>
+			<xs:element name="ValidFrom" type="xs:dateTime" minOccurs="1" maxOccurs="1"/>
+			<xs:element name="ValidUntil" type="xs:dateTime" minOccurs="0" maxOccurs="1"/>
+			<xs:element name="ActivePermissions" type="PermissionsType" minOccurs="0" maxOccurs="1"/>
+		</xs:sequence>
+	</xs:complexType>
+	<!--autorizacijski podaci (prava)-->
+	<xs:complexType name="PermissionsType">
+		<xs:sequence>
+			<xs:element name="Permission" type="PermissionType" minOccurs="1" maxOccurs="unbounded"/>
+		</xs:sequence>
+	</xs:complexType>
+	<!--autorizacijki podatak (pravo)-->
+	<xs:complexType name="PermissionType">
+		<xs:annotation>
+			<xs:documentation>
+				Pojedino ovlaštenja, rola ili atribut
+            </xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="Key" type="PermissionKeyType"/>
+			<xs:element name="Value" type="PermissionValueType"/>
+			<xs:element name="Description" type="PermissionDescriptionType" />
+			<xs:element name="ValidFrom" type="xs:dateTime" minOccurs="0" maxOccurs="1"/>
+			<xs:element name="ValidTo" type="xs:dateTime" minOccurs="0" maxOccurs="1"/>
+			<xs:element name="ValueDescription" type="PermissionValueDescriptionType"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:simpleType name="PermissionKeyType">
+		<xs:restriction base="xs:string">
+			<xs:maxLength value="250"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="PermissionValueType">
+		<xs:restriction base="xs:string">
+			<xs:maxLength value="2000"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="PermissionDescriptionType">
+		<xs:restriction base="xs:string">
+			<xs:maxLength value="250"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="PermissionValueDescriptionType">
+		<xs:restriction base="xs:string">
+			<xs:maxLength value="1000"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<!--Entitet koji kreira dokument ovlaštenja -->
+	<xs:complexType name="FromEntityType">
+		<xs:sequence>
+			<!--Fizička osoba koja kreira dokument ovlaštenja, može biti ili osoba s OIB-om ili osoba bez OIB-a (stranac)-->
+			<xs:element name="Person" type="abase:LocalOrForeignPersonType"/>
+			<xs:element name="Legal" type="abase:LegalType" minOccurs="0" maxOccurs="1"/>
+		</xs:sequence>
+	</xs:complexType>
+	<!--Entitet koji prima ovlaštenja-->
+	<xs:complexType name="ToEntityType">
+		<xs:sequence>
+			<xs:element name="CertificateDN" type="xs:string" minOccurs="0" maxOccurs="1"/>
+			<xs:element name="ApplicativeCertificateDN" type="xs:string" minOccurs="0" maxOccurs="1"/>
+			<xs:element name="Person" type="abase:PersonType"/>
+			<xs:element name="Legal" type="abase:LegalType" minOccurs="0" maxOccurs="1"/>
+			<xs:element name="Email" type="xs:string" minOccurs="0" maxOccurs="1"/>
+		</xs:sequence>
+	</xs:complexType>
+</xs:schema>

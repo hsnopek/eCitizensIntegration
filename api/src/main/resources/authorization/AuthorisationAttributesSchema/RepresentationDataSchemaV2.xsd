@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- edited with XMLSpy v2018 sp1 (x64) (http://www.altova.com) by mstanic1 (Financijska agencija) -->
+<xs:schema xmlns="http://eovlastenja.fina.hr/representationitems/v2" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:abase="http://eovlastenja.fina.hr/authorizationbase/v2" targetNamespace="http://eovlastenja.fina.hr/representationitems/v2" elementFormDefault="qualified" attributeFormDefault="unqualified">
+	<xs:import namespace="http://eovlastenja.fina.hr/authorizationbase/v2" schemaLocation="../BaseElementsSchema/AuthorizationBaseElementsV2.xsd"/>
+	<xs:element name="RepresentationData" type="RepresentationDataType"/>
+	<xs:element name="RepresentationDataItem" type="RepresentationDataItemType"/>
+	<xs:complexType name="RepresentationDataType">
+		<xs:annotation>
+			<xs:documentation>Sadrži zakonska ovlaštenja</xs:documentation>
+		</xs:annotation>
+		<xs:complexContent>
+			<xs:extension base="RepresentationDataItemType">
+				<xs:sequence>
+					<xs:element name="Person" type="abase:PersonType"/>
+				</xs:sequence>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:complexType name="RepresentationDataItemType">
+		<xs:annotation>
+			<xs:documentation>Sadrži zakonska ovlaštenja</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="PersonsFor" type="RepresentativePersonType" minOccurs="0" maxOccurs="unbounded"/>
+			<xs:element name="LegalPersonsFor" type="RepresentativeLegalPersonType" minOccurs="0" maxOccurs="unbounded"/>
+		</xs:sequence>
+	</xs:complexType>
+	<!--FO-->
+	<xs:complexType name="RepresentativePersonType">
+		<xs:annotation>
+			<xs:documentation>Podaci fizičke osobe koju entitet iz zaglavlja ima pravo zastupanja </xs:documentation>
+		</xs:annotation>
+		<xs:complexContent>
+			<xs:extension base="RepresentativePersonItemDataType">
+				<xs:sequence>
+					<xs:element name="Person" type="abase:PersonType"/>
+				</xs:sequence>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<!--FO-->
+	<xs:complexType name="RepresentativePersonItemDataType">
+		<xs:annotation>
+			<xs:documentation>Atributi veze FO-FO</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<!--Izvor zastupanja-->
+			<xs:element name="RepresentationSourceId" type="xs:int"/>
+			<!--Osnova zastupanja-->
+			<!--<xs:element name="RepresentBaseType" type="xs:int"/>-->
+		</xs:sequence>
+	</xs:complexType>
+	<!--PS-->
+	<xs:complexType name="RepresentativeLegalPersonType">
+		<xs:annotation>
+			<xs:documentation>Podaci poslovnog subjekta koju entitet iz zaglavlja ima pravo zastupanja</xs:documentation>
+		</xs:annotation>
+		<xs:complexContent>
+			<xs:extension base="RepresentativeLegalItemDataType">
+				<xs:sequence>
+					<xs:element name="Legal" type="abase:LegalType"/>
+				</xs:sequence>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<!--PS-->
+	<xs:complexType name="RepresentativeLegalItemDataType">
+		<xs:annotation>
+			<xs:documentation>Atributi veze FO-PS</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="Functions">
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element name="Function" type="FunctionType" minOccurs="1" maxOccurs="unbounded"/>
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+		</xs:sequence>
+	</xs:complexType>
+	<!--Funkcija ovlaštene osobe-->
+	<xs:complexType name="FunctionType">
+		<xs:annotation>
+			<xs:documentation>Podaci poslovnog subjekta koju entitet iz zaglavlja ima pravo zastupanja</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="Code" type="xs:string"/>
+			<xs:element name="Name" type="xs:string"/>
+			<xs:element name="Source" type="xs:int"/>
+		</xs:sequence>
+	</xs:complexType>
+</xs:schema>

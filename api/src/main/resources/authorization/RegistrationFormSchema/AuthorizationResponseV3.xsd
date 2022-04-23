@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- edited with XMLSpy v2018 sp1 (x64) (http://www.altova.com) by mstanic1 (Financijska agencija) -->
+<xs:schema xmlns="http://eovlastenja.fina.hr/authorizationdocument/v3" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:abase="http://eovlastenja.fina.hr/authorizationbase/v2" targetNamespace="http://eovlastenja.fina.hr/authorizationdocument/v3" elementFormDefault="qualified" attributeFormDefault="unqualified">
+	<xs:import namespace="http://eovlastenja.fina.hr/authorizationbase/v2" schemaLocation="../BaseElementsSchema/AuthorizationBaseElementsV2.xsd"/>
+	<xs:include schemaLocation="AuthorizationRequestV3.xsd"/>
+	<!--root element odgovora na novi zahtjev dokumenta ovlaštenja-->
+	<xs:element name="ServiceResponse" type="ServiceResponseType"/>
+	<xs:complexType name="ServiceResponseType">
+		<xs:sequence>
+			<xs:element name="ServiceData" type="ServiceDataType"/>
+			<xs:element name="Signatures" type="abase:SignaturesType" minOccurs="0" maxOccurs="1"/>
+		</xs:sequence>
+		<xs:attribute name="Id" type="xs:ID" use="required"/>
+		<xs:attribute name="ForRequestId" type="xs:string" use="required"/>
+	</xs:complexType>
+	<!--odgovor autorizacije korisnika, sa orginalnim zahtjevom (tko kome i u čije ime daje)-->
+	<xs:complexType name="ServiceDataType">
+		<xs:all>
+			<xs:element name="AuthorizationData" type="AuthorizationDataType"/>
+			<!--<xs:element name="ServiceRequest" type="ServiceRequestType"/>-->
+		</xs:all>
+	</xs:complexType>
+	<!--sadržaj odgovora autorizacije korisnika, koja prava su mu odabrana, i izgled dokumenta-->
+	<xs:complexType name="AuthorizationDataType">
+		<xs:sequence>
+			<xs:element name="Permissions" type="PermissionsType" minOccurs="1" maxOccurs="1"/>
+		</xs:sequence>
+	</xs:complexType>
+</xs:schema>

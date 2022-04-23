@@ -1,0 +1,175 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- edited with XMLSpy v2018 sp1 (x64) (http://www.altova.com) by mstanic1 (Financijska agencija) -->
+<xs:schema xmlns="http://eovlastenja.fina.hr/authunion/v2" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:abase="http://eovlastenja.fina.hr/authorizationbase/v2" xmlns:rb="http://eovlastenja.fina.hr/authorizationitems/v2" xmlns:rep="http://eovlastenja.fina.hr/representationitems/v2" targetNamespace="http://eovlastenja.fina.hr/authunion/v2" elementFormDefault="qualified" attributeFormDefault="unqualified">
+	<xs:import namespace="http://eovlastenja.fina.hr/authorizationbase/v2" schemaLocation="../BaseElementsSchema/AuthorizationBaseElementsV2.xsd"/>
+	<xs:import namespace="http://eovlastenja.fina.hr/authorizationitems/v2" schemaLocation="AuthorizationDataSchemaV2.xsd"/>
+	<xs:import namespace="http://eovlastenja.fina.hr/representationitems/v2" schemaLocation="RepresentationDataSchemaV2.xsd"/>
+	<xs:element name="AuthenticationUnion" type="AuthenticationUnionType"/>
+	<xs:element name="AuthorizationUnion" type="AuthorizationUnionType"/>
+	<xs:element name="AuthorizationUnionPermission" type="AuthorizationUnionPermissionType"/>
+	<!-- Detaljnija autorizacijska prava odabrane kombinacije -->
+	<xs:complexType name="AuthorizationUnionPermissionType">
+		<xs:annotation>
+			<xs:documentation>
+                Detaljnija autorizacijska prava odabrane kombinacije 
+            </xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<!--Fizička Osoba iz requesta, autentificirana osoba-->
+			<xs:element name="Person" type="abase:PersonType"/>
+			<!--Poslovni Subjekt koji odgovara JipsTo iz zahtjeva, ako je prazno predstavlja njega kao FO-Građanina-->
+			<xs:element name="LegalTo" type="abase:LegalType" minOccurs="0"/>
+			<!--Predstavlja subjekt iz JipsFor/PersonOibFor iz zahtjeva, tj u čije ime se traže prava -->
+			<xs:element name="EntityFor" type="abase:PersonOrLegalType" />
+			<!--Njegova prava na temelju e-Zastupanja-->
+			<xs:element name="Representation" type="RepresentationAttributesType" minOccurs="0" maxOccurs="1"/>
+			<!--Njegova prava na temelju e-Punomoći-->
+			<xs:element name="Authorization" minOccurs="0">
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element name="CertificateDn" type="xs:string" minOccurs="0" maxOccurs="1"/>
+						<xs:element name="Permissions">
+							<xs:complexType>
+								<xs:sequence>
+									<xs:element name="Permission" type="rb:PermissionType" minOccurs="0" maxOccurs="unbounded"/>
+								</xs:sequence>
+							</xs:complexType>
+						</xs:element>
+					</xs:sequence>
+					<xs:attribute name="AuthValidUntil" type="xs:dateTime"/>
+				</xs:complexType>
+			</xs:element>
+			<xs:element name="Errors" type="abase:ErrorsType"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="RepresentationAttributesType">
+		<xs:sequence>
+			<xs:element name="DataEntityFor">
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element name="DataPerson" type="rep:RepresentativePersonItemDataType" minOccurs="0"/>
+						<xs:element name="DataLegal" type="rep:RepresentativeLegalItemDataType" minOccurs="0"/>
+					</xs:sequence>
+				</xs:complexType>			
+			</xs:element>
+		</xs:sequence>
+	</xs:complexType>
+	<!--Podaci o autorizacijama, sadrži sva prava koja autentificirana osoba ima-->
+	<xs:complexType name="AuthenticationUnionType">
+		<xs:annotation>
+			<xs:documentation>
+                Podaci o autentifikaciji i autorizaciji, podatkovni skup koji se šalje zajedničkoj komponenti
+            </xs:documentation>
+		</xs:annotation>
+		<xs:complexContent>
+			<xs:extension base="AuthorizationUnionType">
+				<xs:sequence>
+					<!--autetnifikacijski podaci-->
+					<xs:element name="Authentication" type="AuthenticationDataType"/>
+				</xs:sequence>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<!--Podaci o autorizacijama, sadrži sva prava koja autentificirana osoba ima-->
+	<xs:complexType name="AuthorizationUnionType">
+		<xs:annotation>
+			<xs:documentation>
+                Podaci o autorizaciji, podatkovni skup koji se šalje zajedničkoj komponenti
+            </xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<!--osoba iz requesta-->
+			<xs:element name="Person" type="abase:PersonType"/>
+			<!--Poslovni Subjekt iz requesta-->
+			<xs:element name="LegalPerson" type="abase:LegalType" minOccurs="0" maxOccurs="1"/>
+			<!--Njegova prava-->
+			<!--<xs:element name="Authorizations" type="AuthorizationUnionItemType" minOccurs="0" maxOccurs="unbounded"/>-->
+			<xs:element name="Authorizations">
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element name="AuthorizationItem" type="AuthorizationUnionItemType" minOccurs="0" maxOccurs="unbounded"/>
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+			<xs:element name="Errors" type="abase:ErrorsType"/>
+		</xs:sequence>
+	</xs:complexType>
+	<!--Podaci o trenutnoj autentifikaciji-->
+	<xs:complexType name="AuthenticationDataType">
+		<xs:annotation>
+			<xs:documentation>
+                Podaci o trenutnoj autentifikaciji
+            </xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<!--identifikator requesta-->
+			<xs:element name="InResponseTo" type="xs:string"/>
+			<!--identifikator requesta-->
+			<xs:element name="NiasSessionHash" type="xs:string"/>
+			<!--razina sigurnosti-->
+			<xs:element name="SecurityLevel" type="xs:int"/>
+			<!--Njegova prava-->
+			<xs:element name="Attributes" type="AuthenticationAttributeType" minOccurs="0" maxOccurs="unbounded"/>
+		</xs:sequence>
+	</xs:complexType>
+	<!--Atribut autentifikacije-->
+	<xs:complexType name="AuthenticationAttributeType">
+		<xs:annotation>
+			<xs:documentation>
+                Atribut autentifikacije
+            </xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<!--identifikator requesta-->
+			<xs:element name="Name" type="xs:string"/>
+			<!--identifikator requesta-->
+			<xs:element name="Value" type="xs:string"/>
+		</xs:sequence>
+	</xs:complexType>
+	<!--Podaci o pojedinoj autorizaciji za korisnika za zajedničku komponentu-->
+	<xs:complexType name="AuthorizationUnionItemType">
+		<xs:annotation>
+			<xs:documentation>
+                Podaci o pojedinoj autorizaciji za korisnika za zajedničku komponentu
+            </xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<!--FO kao djelatnik tvrtke, Ako je null, predstavlja njega kao Fizičku Osobu - Građanina -->
+			<xs:element name="LegalPersonTo" type="abase:LegalType" minOccurs="0" maxOccurs="1"/>
+			<xs:element name="PermissionsFor">
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element name="PermissionFor" type="AuthorizationUnionForItemType" minOccurs="1" maxOccurs="unbounded"/>
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+		</xs:sequence>
+	</xs:complexType>
+	<!--Unutar jednog subjekta u ime koga ima prava-->
+	<xs:complexType name="AuthorizationUnionForItemType">
+		<xs:annotation>
+			<xs:documentation>
+               Unutar jednog subjekta u ime koga ima prava
+            </xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="EntityFor" type="abase:PersonOrLegalType" />
+			<xs:element name="AuthorizationRange" type="AuthorizationRangeType"/>
+			<!--je li pravo na temelju e-Zastupanja-->
+			<xs:element name="BasedOnRepresentation" type="xs:boolean"/>
+			<!--je li pravo na temelju e-Punomoći-->
+			<xs:element name="BasedOnAuthorization" type="xs:boolean"/>
+		</xs:sequence>
+	</xs:complexType>
+	<!--Opseg autorizacije-->
+	<xs:simpleType name="AuthorizationRangeType">
+		<xs:annotation>
+			<xs:documentation>Opseg autorizacije, je li za trenutnu uslug koja pita ili u unutar druge usluge ima prava</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:string">
+			<xs:enumeration value="AllServices"/>
+			<xs:enumeration value="CurrentService"/>
+			<xs:enumeration value="OtherService"/>
+		</xs:restriction>
+	</xs:simpleType>
+</xs:schema>

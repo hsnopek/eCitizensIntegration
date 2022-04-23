@@ -1,0 +1,135 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- edited with XMLSpy v2018 sp1 (x64) (http://www.altova.com) by mstanic1 (Financijska agencija) -->
+<xs:schema xmlns="http://eovlastenja.fina.hr/RoAuthUnionApi/v2" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:abase="http://eovlastenja.fina.hr/authorizationbase/v2" xmlns:authUn="http://eovlastenja.fina.hr/authunion/v2" targetNamespace="http://eovlastenja.fina.hr/RoAuthUnionApi/v2" elementFormDefault="qualified" attributeFormDefault="unqualified">
+	<xs:import namespace="http://eovlastenja.fina.hr/authorizationbase/v2" schemaLocation="../BaseElementsSchema/AuthorizationBaseElementsV2.xsd"/>
+	<xs:import namespace="http://eovlastenja.fina.hr/authunion/v2" schemaLocation="../AuthorisationAttributesSchema/AuthorizationUnionSchemaV2.xsd"/>
+	<xs:element name="AuthorizationUnionRequest" type="AuthorizationUnionRequestType"/>
+	<xs:element name="AuthorizationUnionResponse" type="AuthorizationUnionResponseType"/>
+	<xs:element name="AuthorizationUnionPermissionRequest" type="AuthorizationUnionPermissionRequestType"/>
+	<xs:element name="AuthorizationUnionPermissionResponse" type="AuthorizationUnionPermissionResponseType"/>
+	<xs:element name="AuthenticationUnionDataSubmit" type="AuthenticationUnionDataSubmitType"/>
+	<xs:element name="AuthenticationUnionDataResponse" type="AuthenticationUnionDataResponseType"/>
+	<xs:element name="NavigationDataRequest" type="NavigationDataRequestType"/>
+	<xs:element name="NavigationDataResponse" type="NavigationDataResponseType"/>
+	<xs:element name="SignedAuthorizationUnionPermissionResponse" type="SignedAuthorizationUnionPermissionResponseType"/>
+	<!--Potpisan odgovor usluzi o konkretnim pravima pristupa-->
+	<xs:complexType name="SignedAuthorizationUnionPermissionResponseType">
+		<xs:annotation>
+			<xs:documentation>Potpisan odgovor usluzi o konkretnim pravima pristupa</xs:documentation>
+		</xs:annotation>
+		<xs:complexContent>
+			<xs:extension base="AuthorizationUnionPermissionResponseType">
+				<xs:sequence>
+					<xs:element name="Signatures" type="abase:SignaturesType"/>
+				</xs:sequence>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<!--Nakon što se sa navigacijske trake odabere entitet u ime kojeg se želi djelovati, ovim upitom se dohvaćaju autorizacijska prava odabrane kombinacije-->
+	<xs:complexType name="AuthorizationUnionPermissionRequestType">
+		<xs:annotation>
+			<xs:documentation>Nakon što se sa navigacijske trake odabere entitet u ime kojeg se želi djelovati, ovim upitom se dohvaćaju autorizacijska prava odabrane kombinacije</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<!--ID NIAS sesije-->
+			<xs:element name="Sesija_Id" type="xs:string"/>
+			<!--DN certifikata za koji se provjerava autorizacija-->
+			<xs:element name="CertificateDn" type="xs:string" minOccurs="0"/>
+			<!--Koja Fizička Osoba građanin djeluje-->
+			<xs:element name="PersonOIB" type="abase:OibType"/>
+			<!--Unutar kojeg PS-a djeluje (kao djelatnik koje tvrtke), ako nije postavljeno smatra se on kao FO-->
+			<xs:element name="JipsTo" type="abase:JipsType" minOccurs="0" maxOccurs="1"/>
+			<xs:element name="IdentfiersFor" type="abase:PersonOrLegalIdentifierType"/>
+		</xs:sequence>
+		<xs:attribute name="Id" type="xs:ID" use="required"/>
+	</xs:complexType>
+	<!--Odgovor usluzi o konkretnim pravima pristupa-->
+	<xs:complexType name="AuthorizationUnionPermissionResponseType">
+		<xs:annotation>
+			<xs:documentation>Odgovor usluzi o konkretnim pravima pristupa</xs:documentation>
+		</xs:annotation>
+		<xs:complexContent>
+			<xs:extension base="authUn:AuthorizationUnionPermissionType">
+				<xs:attribute name="Id" type="xs:ID" use="required"/>
+				<xs:attribute name="ForRequestId" type="xs:string" use="required"/>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<!--e-Usluga šalje zahtjev za dohvatom sadržaja navigacijske trake-->
+	<xs:complexType name="NavigationDataRequestType">
+		<xs:annotation>
+			<xs:documentation>e-Usluga šalje zahtjev za dohvatom sadržaja navigacijske trake</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<!--ID NIAS sesije-->
+			<xs:element name="Sesija_Id" type="xs:string"/>
+			<!--DN certifikata za koji se provjerava autorizacija-->
+			<xs:element name="CertificateDn" type="xs:string" minOccurs="0"/>
+			<!--Koja Fizička Osoba građanin djeluje-->
+			<xs:element name="PersonOIB" type="abase:OibType"/>
+			<!--Unutar kojeg PS-a djeluje (kao djelatnik koje tvrtke), ako nije postavljeno smatra se on kao FO-->
+			<xs:element name="JipsTo" type="abase:JipsType" minOccurs="0" maxOccurs="1"/>
+		</xs:sequence>
+		<xs:attribute name="Id" type="xs:ID" use="required"/>
+	</xs:complexType>
+	<!--Navigacijska traka šalje odgovor sa autorizacijskim tokenom NIAS-u koji će proslijediti usluzi-->
+	<xs:complexType name="NavigationDataResponseType">
+		<xs:annotation>
+			<xs:documentation>Navigacijska traka šalje odgovor sa autorizacijskim tokenom NIAS-u koji će proslijediti usluzi</xs:documentation>
+		</xs:annotation>
+		<xs:complexContent>
+			<xs:extension base="authUn:AuthorizationUnionType">
+				<xs:attribute name="Id" type="xs:ID" use="required"/>
+				<xs:attribute name="ForRequestId" type="xs:string" use="required"/>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<!--NIAS šalje navigacijskoj traki autentifikacijske i autorizacijske podatke trenutnog korisnika-->
+	<xs:complexType name="AuthenticationUnionDataSubmitType">
+		<xs:annotation>
+			<xs:documentation>NIAS šalje navigacijskoj traki autentifikacijske i autorizacijske podatke trenutnog korisnika</xs:documentation>
+		</xs:annotation>
+		<xs:complexContent>
+			<xs:extension base="authUn:AuthenticationUnionType">
+				<xs:attribute name="Id" type="xs:ID" use="required"/>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<!--Navigacijska traka šalje odgovor sa autorizacijskim tokenom NIAS-u koji će proslijediti usluzi-->
+	<xs:complexType name="AuthenticationUnionDataResponseType">
+		<xs:annotation>
+			<xs:documentation>Navigacijska traka šalje odgovor sa autorizacijskim tokenom NIAS-u koji će proslijediti usluzi</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="NavToken" type="xs:string"/>
+		</xs:sequence>
+		<xs:attribute name="Id" type="xs:ID" use="required"/>
+		<xs:attribute name="ForRequestId" type="xs:string" use="required"/>
+	</xs:complexType>
+	<!--Upit za dohvat unije e-Punomoći i e-Zastupanja kojom se dobiva dvodimenzionalna lista Entiteta u čije FO može djelovati - za navigacijsku traku-->
+	<xs:complexType name="AuthorizationUnionRequestType">
+		<xs:annotation>
+			<xs:documentation>Upit za dohvat unije e-Punomoći i e-Zastupanja kojom se dobiva dvodimenzionalna lista Entiteta u čije FO može djelovati - za navigacijsku traku</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="PersonOIB" type="abase:OibType"/>
+			<xs:element name="LegalJips" type="abase:JipsType" minOccurs="0" maxOccurs="1"/>
+			<xs:element name="ServiceGuid" type="xs:string"/>
+			<!--ID NIAS sesije-->
+			<xs:element name="SesijaId" type="xs:string"/>
+		</xs:sequence>
+		<xs:attribute name="Id" type="xs:ID" use="required"/>
+	</xs:complexType>
+	<!--Odgovor unije e-Punomoći i e-Zastupanja kojom se dobiva dvodimenzionalna lista Entiteta u čije FO može djelovati-->
+	<xs:complexType name="AuthorizationUnionResponseType">
+		<xs:annotation>
+			<xs:documentation>Odgovor unije e-Punomoći i e-Zastupanja kojom se dobiva dvodimenzionalna lista Entiteta u čije FO može djelovati - za navigacijsku traku</xs:documentation>
+		</xs:annotation>
+		<xs:complexContent>
+			<xs:extension base="authUn:AuthorizationUnionType">
+				<xs:attribute name="Id" type="xs:ID" use="required"/>
+				<xs:attribute name="ForRequestId" type="xs:string" use="required"/>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+</xs:schema>

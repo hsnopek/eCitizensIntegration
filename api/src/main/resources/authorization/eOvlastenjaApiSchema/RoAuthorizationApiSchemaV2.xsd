@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- edited with XMLSpy v2018 sp1 (x64) (http://www.altova.com) by mstanic1 (Financijska agencija) -->
+<xs:schema xmlns="http://eovlastenja.fina.hr/roauthorizationapi/v2" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:abase="http://eovlastenja.fina.hr/authorizationbase/v2" xmlns:authIt="http://eovlastenja.fina.hr/authorizationitems/v2" targetNamespace="http://eovlastenja.fina.hr/roauthorizationapi/v2" elementFormDefault="qualified" attributeFormDefault="unqualified">
+	<xs:import namespace="http://eovlastenja.fina.hr/authorizationbase/v2" schemaLocation="../BaseElementsSchema/AuthorizationBaseElementsV2.xsd"/>
+	<xs:import namespace="http://eovlastenja.fina.hr/authorizationitems/v2" schemaLocation="../AuthorisationAttributesSchema/AuthorizationDataSchemaV2.xsd"/>
+	<xs:element name="AuthorizationDataLegalForRequest" type="AuthorizationDataLegalForRequestType"/>
+	<xs:element name="AuthorizationDataLegalForResponse" type="AuthorizationDataLegalForResponseType"/>
+	<!--Upit za dohvat popis e-Punomoći tko sve može djelovati u ime određenog Poslovnog Subjekta-->
+	<xs:complexType name="AuthorizationDataLegalForRequestType">
+		<xs:annotation>
+			<xs:documentation>Upit za dohvat popis e-Punomoći tko sve može djelovati u ime određenog Poslovnog Subjekta</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="LegalJips" type="abase:JipsType" />
+		</xs:sequence>
+		<xs:attribute name="Id" type="xs:ID" use="required"/>
+	</xs:complexType>
+	<!--Odgovor sa popisom e-Punomoći tko sve može djelovati u ime određenog Poslovnog Subjekta-->
+	<xs:complexType name="AuthorizationDataLegalForResponseType">
+		<xs:annotation>
+			<xs:documentation>Odgovor sa popisom e-Punomoći tko sve može djelovati u ime određenog Poslovnog Subjekta</xs:documentation>
+		</xs:annotation>
+		<xs:complexContent>
+			<xs:extension base="authIt:AuthorizationDataLegalForType">
+				<xs:attribute name="Id" type="xs:ID" use="required"/>
+				<xs:attribute name="ForRequestId" type="xs:string" use="required"/>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+</xs:schema>

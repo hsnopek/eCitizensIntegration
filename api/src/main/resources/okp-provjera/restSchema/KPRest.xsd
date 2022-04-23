@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<schema xmlns="http://www.w3.org/2001/XMLSchema" targetNamespace="http://apis-it.hr/umu/2015/types/kp" xmlns:tns="http://apis-it.hr/umu/2015/types/kp" elementFormDefault="qualified">
+
+	<include schemaLocation="../schema/ListaOibovaServiceSchema.xsd"/>
+	
+	<element name="ServiceRequest" type="tns:ServiceRequestType"></element>
+	<element name="ServiceResponse" type="tns:ServiceResponseType"></element>
+
+		<complexType name="ServiceRequestType">
+			<sequence>
+				<element name="GsbIdPosiljatelja" type="tns:PosiljateljIdType" minOccurs="1" maxOccurs="1"/>
+				<element name="Upit" type="tns:UpitType" minOccurs="1" maxOccurs="1"/>
+			</sequence>
+		</complexType>
+
+		<complexType name="ServiceResponseType">
+			<sequence>
+				<element name="Odgovor" type="tns:OdgovorType" minOccurs="1" maxOccurs="1"/>
+			</sequence>
+		</complexType>
+
+</schema>

@@ -1,0 +1,156 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- edited with XMLSpy v2018 sp1 (x64) (http://www.altova.com) by mstanic1 (Financijska agencija) -->
+<xs:schema xmlns:abase="http://eovlastenja.fina.hr/authorizationbase/v2" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:dsig="http://www.w3.org/2000/09/xmldsig#" targetNamespace="http://eovlastenja.fina.hr/authorizationbase/v2" elementFormDefault="qualified" attributeFormDefault="unqualified">
+	<xs:import namespace="http://www.w3.org/2000/09/xmldsig#" schemaLocation="xmlsig.xsd"/>
+	<xs:element name="Person" type="abase:PersonType"/>
+	<xs:element name="ForeignPerson" type="abase:ForeignPersonType"/>
+	<xs:element name="Legal" type="abase:LegalType"/>
+	<xs:element name="Signatures" type="abase:SignaturesType"/>
+	<xs:element name="Error" type="abase:ErrorType"/>
+	<xs:element name="PersonOrLegalIdentifier" type="abase:PersonOrLegalIdentifierType"/>
+	<xs:element name="PersonOrLegal" type="abase:PersonOrLegalType"/>
+	<xs:element name="LocalOrForeignPerson" type="abase:LocalOrForeignPersonType"/>
+	<xs:element name="AdditionalAttribute" type="abase:AdditionalAttributeType"/>
+  
+	<!--Fizička Osoba sa HR OIB-om -->
+	<xs:complexType name="PersonType">
+		<xs:annotation>
+			<xs:documentation>
+				 Tip podatka fizičke osobe s HR OIB-om
+      </xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="OIB" type="abase:OibType"/>
+			<xs:element name="FirstName" type="xs:string"/>
+			<xs:element name="LastName" type="xs:string"/>
+      <xs:element name="AdditionalAttributes" type="abase:AdditionalAttributesType" minOccurs="0" maxOccurs="1"/>
+		</xs:sequence>
+	</xs:complexType>
+	<!--Fizička Osoba - stranac bez HR OIB-a-->
+	<xs:complexType name="ForeignPersonType">
+		<xs:annotation>
+			<xs:documentation>
+				 Tip podatka fizičke osobe bez HR OIB-a
+            </xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="Identifier" type="xs:string"/>
+			<xs:element name="IdentifierDocumentType" type="xs:int"/>
+			<xs:element name="CountryCode" type="xs:string"/>
+			<xs:element name="FirstName" type="xs:string"/>
+			<xs:element name="LastName" type="xs:string"/>
+      <xs:element name="AdditionalAttributes" type="abase:AdditionalAttributesType" minOccurs="0" maxOccurs="1"/>
+		</xs:sequence>
+	</xs:complexType>
+	<!--Poslovni subjekt, IZMJENA atributa, umjesto OIB + ID sada je ID + IZVOR_ID -->
+	<xs:complexType name="LegalType">
+		<xs:annotation>
+			<xs:documentation>
+				 Tip podatka pravne osobe
+        </xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<!--Dugi naziv Poslovnog Subjekta-->
+			<xs:element name="Name" type="xs:string"/>
+			<!--(IPS + IZVOR_REG) Vrijednost koja jedinstveno identificira Poslovni Subjekt u temeljnom registru-->
+			<xs:element name="Jips" type="abase:JipsType"/>
+
+      <xs:element name="AdditionalAttributes" type="abase:AdditionalAttributesType" minOccurs="0" maxOccurs="1"/>
+		</xs:sequence>
+	</xs:complexType>
+	<!--Format Jedinstvenog Identifikatora Poslovnog Subjekta-->
+	<xs:complexType name="JipsType">
+		<xs:sequence>
+			<!--(IPS) Vrijednost koja jedinstveno identificira Poslovni Subjekt u temeljnom registru-->
+			<xs:element name="IPS" type="abase:IpsType"/>
+			<!--(IZVOR_REG) Označava izvor registra gdje je Identifier (IPS) jedinstven -->
+			<xs:element name="IZVOR_REG" type="xs:int"/>
+		</xs:sequence>
+	</xs:complexType>
+	<!--IPS Format-->
+	<xs:simpleType name="IpsType">
+		<xs:restriction base="xs:string">
+			<xs:maxLength value="30"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<!--OIB Format-->
+	<xs:simpleType name="OibType">
+		<xs:restriction base="xs:string">
+			<xs:pattern value="[0-9]{11}"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<!--kolekcija potpisa-->
+	<xs:complexType name="SignaturesType">
+		<xs:sequence>
+			<xs:element ref="dsig:Signature" minOccurs="0" maxOccurs="unbounded"/>
+		</xs:sequence>
+	</xs:complexType>
+	<!--Lista grešaka-->
+	<xs:complexType name="ErrorsType">
+		<xs:sequence>
+			<xs:element name="Error" type="abase:ErrorType" minOccurs="0" maxOccurs="unbounded"/>
+		</xs:sequence>
+	</xs:complexType>
+	
+	<!--Objekt koji sadrži Identifikatore Fizičku Osobu ili Poslovni Subjekt (choice je logičniji izbor, no radi (de)serijalizacija lakše je raditi na ovaj način, istovremeno je moguće podržati i json i xml-->
+	<xs:complexType name="PersonOrLegalIdentifierType">
+		<xs:annotation>
+			<xs:documentation>Objekt koji sadrži Identifikatore Fizičku Osobu ili Poslovni Subjekt</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="LegalJips" type="abase:JipsType" minOccurs="0"/>
+			<xs:element name="PersonOib" type="abase:OibType" minOccurs="0"/>
+		</xs:sequence>
+	</xs:complexType>
+	
+	<!--Objekt koji sadrži Fizičku Osobu ili Poslovni Subjekt (choice je logičniji izbor, no radi (de)serijalizacija lakše je raditi na ovaj način, istovremeno je moguće podržati i json i xml-->
+	<xs:complexType name="PersonOrLegalType">
+		<xs:annotation>
+			<xs:documentation>Objekt koji sadrži Fizičku Osobu ili Poslovni Subjekt</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="Person" type="abase:PersonType"  minOccurs="0" />
+			<xs:element name="Legal" type="abase:LegalType"  minOccurs="0"/>
+		</xs:sequence>
+	</xs:complexType>
+	
+	<!--Objekt koji sadrži ili Domaću Fizičku Osobu (sa OIbom) ili stranu (choice je logičniji izbor, no radi (de)serijalizacija lakše je raditi na ovaj način, istovremeno je moguće podržati i json i xml-->
+	<xs:complexType name="LocalOrForeignPersonType">
+		<xs:annotation>
+			<xs:documentation>Objekt koji sadrži ili Domaću Fizičku Osobu (sa OIbom) ili stranu</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="LocalPerson" type="abase:PersonType" minOccurs="0"/>
+			<xs:element name="ForeignPerson" type="abase:ForeignPersonType" minOccurs="0"/>
+		</xs:sequence>
+	</xs:complexType>
+	
+	<!--Format greške-->
+	<xs:complexType name="ErrorType">
+		<xs:sequence>
+			<xs:element name="Code" type="xs:string"/>
+			<xs:element name="Message" type="xs:string"/>
+		</xs:sequence>
+	</xs:complexType>
+  
+  
+  <!--Lista dodatnih atributa-->
+	<xs:complexType name="AdditionalAttributesType">
+		<xs:sequence>
+			<xs:element name="Attribute" type="abase:AdditionalAttributeType" minOccurs="0" maxOccurs="unbounded"/>
+		</xs:sequence>
+	</xs:complexType>
+
+  <!--Atribut u obliku Key-Value para-->
+  <xs:complexType name="AdditionalAttributeType">
+    <xs:annotation>
+      <xs:documentation>Atribut u obliku Key-Value para</xs:documentation>
+    </xs:annotation>
+    <xs:simpleContent>
+      <xs:extension base="xs:string">
+        <xs:attribute name="Key" type="xs:string"/>
+      </xs:extension>
+    </xs:simpleContent>
+  </xs:complexType>
+  
+</xs:schema>
