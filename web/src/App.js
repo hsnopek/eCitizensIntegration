@@ -71,7 +71,7 @@ const App = () => {
               </li>
               <li>
                 <Link to={"/simulate-send-message-to-okp"} className="nav-link" style={{color:'white'}}>
-                  Simulate sending message to OKP
+                  Send message to OKP
                 </Link>
               </li>
             </div>

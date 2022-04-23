@@ -92,7 +92,7 @@ public class NiasLogoutService {
             e.printStackTrace();
         }
     }
-    public void recieveLogoutRequestAndSendLogoutResponse(HttpServletRequest req, HttpServletResponse resp){
+    public void receiveLogoutRequestAndSendLogoutResponse(HttpServletRequest req, HttpServletResponse resp){
         try {
             LogoutRequestToken logoutRequest = samlTokenManager.receiveLogoutRequest(new HttpServletRequestAdapter(req));
             if (!logoutRequest.IsValid()) {

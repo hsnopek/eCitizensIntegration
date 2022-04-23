@@ -63,7 +63,7 @@ public class NiasController {
 
     @PostMapping("/single-sign-out")
     private void singleSignOutService(HttpServletRequest req, HttpServletResponse resp) {
-        niasLogoutService.recieveLogoutRequestAndSendLogoutResponse(req, resp);
+        niasLogoutService.receiveLogoutRequestAndSendLogoutResponse(req, resp);
     }
 
     @GetMapping("/navigation-bar-data")

@@ -22,7 +22,7 @@ public class CertificateConfiguration {
 
     @Bean
     public X509Certificate appCert()
-            throws UnrecoverableKeyException, ConfigurationException, MetadataProviderException, SAMLException,
+            throws UnrecoverableKeyException,
             CertificateException, KeyStoreException, NoSuchAlgorithmException {
         return Objects.requireNonNull(CertificateHelper.getBasicX509CredentialFromJKS(
                 appKeyStore(),
@@ -31,9 +31,7 @@ public class CertificateConfiguration {
     }
 
     @Bean(name = "appCertPublicKey")
-    public PublicKey appCertPublicKey()
-            throws UnrecoverableKeyException, ConfigurationException, MetadataProviderException, SAMLException,
-            CertificateException, KeyStoreException, NoSuchAlgorithmException {
+    public PublicKey appCertPublicKey() throws UnrecoverableKeyException, CertificateException, KeyStoreException, NoSuchAlgorithmException {
         return appCert().getPublicKey();
     }
 
