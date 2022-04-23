@@ -3,17 +3,17 @@
 
 	<include schemaLocation="../schema/ListaOibovaServiceSchema.xsd"/>
 	
-	<element name="ServiceRequest" type="tns:ServiceRequestType"></element>
-	<element name="ServiceResponse" type="tns:ServiceResponseType"></element>
+	<element name="ServiceRequest" type="tns:ServiceRequest"></element>
+	<element name="ServiceResponse" type="tns:ServiceResponse"></element>
 
-		<complexType name="ServiceRequestType">
+		<complexType name="ServiceRequest">
 			<sequence>
 				<element name="GsbIdPosiljatelja" type="tns:PosiljateljIdType" minOccurs="1" maxOccurs="1"/>
 				<element name="Upit" type="tns:UpitType" minOccurs="1" maxOccurs="1"/>
 			</sequence>
 		</complexType>
 
-		<complexType name="ServiceResponseType">
+		<complexType name="ServiceResponse">
 			<sequence>
 				<element name="Odgovor" type="tns:OdgovorType" minOccurs="1" maxOccurs="1"/>
 			</sequence>

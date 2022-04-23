@@ -259,17 +259,17 @@
                         </configuration>
                     </execution>
                     <execution>
-                        <id>okp-provjera-generate</id>
+                        <id>okp-korisnicki-pretinac-rest-schema-generate</id>
                         <goals>
                             <goal>generate</goal>
                         </goals>
                         <configuration>
-                            <schemaDirectory>src/main/resources/okp-provjera/gsbSchema</schemaDirectory>
+                            <schemaDirectory>src/main/resources/okp/restSchema</schemaDirectory>
                             <schemaIncludes>
-                                <schemaInclude>GSBSchema.xsd</schemaInclude>
+                                <schemaInclude>KPRest.xsd</schemaInclude>
                             </schemaIncludes>
-                            <generatePackage>okpprovjera</generatePackage>
-                            <generateDirectory>${project.build.directory}/generated-sources/okpprovjera
+                            <generatePackage>korisnickipretinacrest</generatePackage>
+                            <generateDirectory>${project.build.directory}/generated-sources/korisnickipretinacrest
                             </generateDirectory>
                         </configuration>
                     </execution>
@@ -332,8 +332,8 @@
                                 <source>target/generated-sources/authorizationrequestv3</source>
                                 <source>target/generated-sources/authorizationresponsev3</source>
                                 <source>target/generated-sources/gsbservice</source>
-                                <source>target/generated-sources/okpprovjera</source>
                                 <source>target/generated-sources/korisnickipretinac</source>
+                                <source>target/generated-sources/korisnickipretinacrest</source>
                                 <source>target/generated-sources/querydsl</source>
                                 <source>target/generated-sources/roauthorizationapischema</source>
                             </sources>

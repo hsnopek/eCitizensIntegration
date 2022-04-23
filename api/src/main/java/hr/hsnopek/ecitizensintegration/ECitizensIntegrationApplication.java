@@ -25,7 +25,7 @@ public class ECitizensIntegrationApplication implements CommandLineRunner {
 
     @Override
     @Transactional
-    public void run(String... args) throws Exception {
+    public void run(String... args) {
         roleRepository.save(new Role(RoleNameEnum.USER));
         roleRepository.save(new Role(RoleNameEnum.ADMIN));
     }

@@ -5,7 +5,8 @@ import hr.apis_it.umu._2013.types.gsb.SendMessageRequest;
 import hr.apis_it.umu._2013.types.gsb.SendMessageResponse;
 import hr.hsnopek.ecitizensintegration.configuration.ApplicationProperties;
 import korisnickipretinac.KorisnickiPretinacPorukaType;
-import okpprovjera.ServiceRequestType;
+import korisnickipretinacrest.OdgovorType;
+import korisnickipretinacrest.UpitType;
 import org.apache.cxf.configuration.jsse.TLSClientParameters;
 import org.apache.cxf.configuration.security.FiltersType;
 import org.apache.cxf.endpoint.Client;
@@ -22,7 +23,10 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.io.ClassPathResource;
 
-import javax.net.ssl.*;
+import javax.net.ssl.KeyManager;
+import javax.net.ssl.KeyManagerFactory;
+import javax.net.ssl.TrustManager;
+import javax.net.ssl.TrustManagerFactory;
 import javax.xml.ws.soap.SOAPBinding;
 import java.io.IOException;
 import java.io.InputStream;
@@ -53,7 +57,9 @@ public class OKPConfiguration {
                 new Class[]{
                         SendMessageRequest.class,
                         SendMessageResponse.class,
-                        KorisnickiPretinacPorukaType.class
+                        KorisnickiPretinacPorukaType.class,
+                        UpitType.class,
+                        OdgovorType.class
                 }
         );
 
