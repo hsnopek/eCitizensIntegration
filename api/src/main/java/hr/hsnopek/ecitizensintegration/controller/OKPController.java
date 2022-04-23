@@ -2,6 +2,7 @@ package hr.hsnopek.ecitizensintegration.controller;
 
 import hr.apis_it.umu._2013.types.gsb.SendMessageResponse;
 import hr.hsnopek.ecitizensintegration.domain.feature.okp.client.OKPClient;
+import korisnickipretinac.OdgovorType;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -20,17 +21,17 @@ public class OKPController {
         this.okpClient = okpClient;
     }
 
-    @PostMapping(value = "/send-message/{pinPrimatelja}", produces = MediaType.APPLICATION_XML_VALUE)
-    public ResponseEntity<?> sendMessage(@PathVariable String pinPrimatelja) throws DatatypeConfigurationException, JAXBException {
+    @PostMapping(value = "/send-message/{pinPrimatelja}")
+    public ResponseEntity<?> sendMessage(@PathVariable String pinPrimatelja) throws DatatypeConfigurationException {
         SendMessageResponse sendMessageResponse = okpClient.sendTestMessage(pinPrimatelja);
-        return ResponseEntity.status(HttpStatus.OK).body(sendMessageResponse);
+        return ResponseEntity.status(HttpStatus.OK).body(null);
     }
 
-    @PostMapping(value = "/provjera", produces = MediaType.APPLICATION_XML_VALUE)
+    @PostMapping(value = "/provjera")
     public ResponseEntity<?> sendProvjeraMessage(@RequestParam String pinPrimatelja, @RequestParam String countryCodeId)
-            throws DatatypeConfigurationException, JAXBException {
+            throws DatatypeConfigurationException {
 
         SendMessageResponse sendMessageResponse = okpClient.sendProvjeraTestMessage(pinPrimatelja, countryCodeId);
-        return ResponseEntity.status(HttpStatus.OK).body(sendMessageResponse);
+        return ResponseEntity.status(HttpStatus.OK).body(null);
     }
 }

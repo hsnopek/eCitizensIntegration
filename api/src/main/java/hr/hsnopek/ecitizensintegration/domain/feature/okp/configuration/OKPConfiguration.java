@@ -59,7 +59,8 @@ public class OKPConfiguration {
                         SendMessageResponse.class,
                         KorisnickiPretinacPorukaType.class,
                         UpitType.class,
-                        OdgovorType.class
+                        korisnickipretinacrest.OdgovorType.class,
+                        korisnickipretinac.OdgovorType.class
                 }
         );
 

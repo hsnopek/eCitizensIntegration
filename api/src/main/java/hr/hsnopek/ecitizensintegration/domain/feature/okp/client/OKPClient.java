@@ -10,29 +10,23 @@ import hr.hsnopek.ecitizensintegration.domain.feature.okp.builder.PorukaBuilder;
 import hr.hsnopek.ecitizensintegration.domain.feature.okp.builder.PrivitakBuilder;
 import org.springframework.stereotype.Service;
 
-import javax.xml.bind.JAXBException;
 import javax.xml.datatype.DatatypeConfigurationException;
-import java.security.KeyStore;
 import java.util.List;
 
 @Service
 public class OKPClient {
 
     private final GSBServicePortType gsbService;
-    private final KeyStore appKeyStore;
-    private final KeyStore appTrustStore;
 
-    public OKPClient(GSBServicePortType gsbService, KeyStore appKeyStore, KeyStore appTrustStore) {
+    public OKPClient(GSBServicePortType gsbService) {
         this.gsbService = gsbService;
-        this.appKeyStore = appKeyStore;
-        this.appTrustStore = appTrustStore;
     }
 
-    public SendMessageResponse sendMessage(SendMessageRequest sendMessageRequest) throws DatatypeConfigurationException, JAXBException {
+    public SendMessageResponse sendMessage(SendMessageRequest sendMessageRequest) {
         return this.gsbService.sendMessage(sendMessageRequest);
     }
 
-    public SendMessageResponse sendTestMessage(String pinPrimatelja) throws DatatypeConfigurationException, JAXBException {
+    public SendMessageResponse sendTestMessage(String pinPrimatelja) throws DatatypeConfigurationException {
         SendMessageRequest sendMessageRequest = OKPRequestBuilder.create()
                 .setSenderId(ApplicationProperties.OKP_SENDER_ID)
                 .setServiceId(ApplicationProperties.OKP_SERVICE_ID)
@@ -57,7 +51,7 @@ public class OKPClient {
     }
 
     public SendMessageResponse sendProvjeraTestMessage(String pinPrimatelja, String countryCodeID)
-            throws DatatypeConfigurationException, JAXBException {
+            throws DatatypeConfigurationException {
 
         SendMessageRequest sendMessageRequest = OKPProvjeraRequestBuilder.create()
                 .setSenderId(ApplicationProperties.OKP_SENDER_ID)
