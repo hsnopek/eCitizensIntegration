@@ -16,6 +16,7 @@ import RegistrationFormPage from "./pages/RegistrationFormPage/RegistrationFormP
 import SimulateAuthorizationServicePage
   from "./pages/SimulateAuthorizationServicePage/SimulateAuthorizationServicePage";
 import LogoutPage from "./pages/LogoutPage/LogoutPage";
+import SimulateSendMessageToOkpPage from "./pages/SimulateSendMessageToOkpPage/SimulateSendMessageToOkpPage";
 
 const App = () => {
 
@@ -27,6 +28,7 @@ const App = () => {
     { path: '/change-subject', element: <ChangeSubjectPage /> },
     { path: '/registration-form-entry', element: <RegistrationFormPage /> },
     { path: '/simulate-authorization-service', element: <SimulateAuthorizationServicePage /> },
+    { path: '/simulate-send-message-to-okp', element: <SimulateSendMessageToOkpPage /> },
     { path: '/logout', element: <LogoutPage /> },
 
   ]);
@@ -65,6 +67,11 @@ const App = () => {
               <li>
                 <Link to={"/simulate-authorization-service"} className="nav-link" style={{color:'white'}}>
                   Simulate authorization service
+                </Link>
+              </li>
+              <li>
+                <Link to={"/simulate-send-message-to-okp"} className="nav-link" style={{color:'white'}}>
+                  Simulate sending message to OKP
                 </Link>
               </li>
             </div>
