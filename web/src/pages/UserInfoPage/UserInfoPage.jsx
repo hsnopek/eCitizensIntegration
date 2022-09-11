@@ -8,7 +8,6 @@ function UserInfoPage(props) {
 
     useEffect(() => {
         axios.get("/user/get-user-session-data").then( res => {
-            console.log(res.data, 'userData')
             setSessionList(res.data);
         })
     }, []);
@@ -30,8 +29,8 @@ function UserInfoPage(props) {
                 </thead>
                 <tbody>
                 {
-                    sessionList && sessionList.map(session => {
-                        return <tr>
+                    sessionList && sessionList.map((session, index) => {
+                        return <tr key={index}>
                             <td>{session?.firstName}</td>
                             <td>{session?.lastName}</td>
                             <td>{session?.ident}</td>

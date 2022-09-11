@@ -6,10 +6,6 @@ function SimulateSendMessageToOkpPage(props) {
     const [response, setResponse] = useState('');
     const [oib, setOib] = useState('');
 
-    useEffect(() => {
-        console.log(oib, 'oib');
-    }, [oib]);
-
     const handleSendMessageToOkp = () => {
         axios.post("/okp/send-message/" + oib).then( res => {
             setResponse(res.data);

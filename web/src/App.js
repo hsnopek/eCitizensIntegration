@@ -4,7 +4,6 @@ import {
   useRoutes
 } from "react-router-dom";
 import "bootstrap/dist/css/bootstrap.min.css";
-import {Fragment, useEffect} from "react";
 import HomePage from "./pages/HomePage/HomePage";
 import {useSelector} from 'react-redux'
 import RedirectUser from "./pages/RedirectUser/RedirectUser";
@@ -36,7 +35,6 @@ const App = () => {
   // get navbar state from redux toolkit store
   const navbarSelectors = useSelector(state => state.navigationBar);
   const userData = useSelector(state => state.userData);
-  console.log(userData, 'sessionIndex')
   // replace navbar on navbar property change
   useNavbarEffect(navbarSelectors, userData);
 
@@ -46,30 +44,30 @@ const App = () => {
         <div>
           <nav className="navbar navbar-expand" style={{backgroundColor: '#343a40'}}>
             <div className="navbar-nav mr-auto">
-              <li className="nav-item">
+              <li className="nav-item" key="home">
                 <Link to={"/"} className="nav-link" style={{color:'white'}}>
                   Home
                 </Link>
               </li>
                {/*TODO: HIDE THIS IF NOT LOGGED IN*/}
-              <li className="nav-item">
+              <li className="nav-item" key="user-info">
                 <Link to={"/user-info-page"} className="nav-link" style={{color:'white'}}>
                   User info
                 </Link>
               </li>
               {/*TODO: HIDE THIS IF NOT LOGGED IN*/}
-              <li>
+              <li key="authorization-info">
                 <Link to={"/authorization-info-page"} className="nav-link" style={{color:'white'}}>
                   Authorization info
                 </Link>
               </li>
               {/*TODO: HIDE THIS IF NOT LOGGED IN*/}
-              <li>
+              <li key="simulate-authorization-service">
                 <Link to={"/simulate-authorization-service"} className="nav-link" style={{color:'white'}}>
                   Simulate authorization service
                 </Link>
               </li>
-              <li>
+              <li key="simulate-send-message-okp">
                 <Link to={"/simulate-send-message-to-okp"} className="nav-link" style={{color:'white'}}>
                   Send message to OKP
                 </Link>

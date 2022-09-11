@@ -46,8 +46,6 @@ export const navigationBarSlice = createSlice({
             state.toLegalIzvorReg = action.payload.toLegalIzvorReg;
         },
         setShowEntitySearchCount: (state, action) => {
-            console.log(state.showEntitySearchCount, 'showEntitySearchCount');
-            console.log(action.payload, 'payload')
             state.showEntitySearchCount = action.payload;
         }, cleanStore(state, payload){
             cleanCookies();

@@ -8,7 +8,6 @@ function AuthorizationInfoPage(props) {
 
     useEffect(() => {
         axios.get("/user/get-authorization-info").then( res => {
-            console.log(res.data, 'authorizationInfo')
             setAuthorizationInfo(res.data);
         })
     }, []);

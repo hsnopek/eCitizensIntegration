@@ -61,8 +61,9 @@ public class RefreshTokenService {
             } catch (Exception e) {
                 throw new RefreshTokenInvalidException(Translator.toLocale(Message.ERROR_AUTHENTICATION_REFRESH_TOKEN_NOT_VALID), e);
             }
+        } else {
+            throw new RefreshTokenInvalidException("Error: Refresh token is null.");
         }
-        return new AuthenticateUserResponse(null, null);
     }
 
     @Transactional

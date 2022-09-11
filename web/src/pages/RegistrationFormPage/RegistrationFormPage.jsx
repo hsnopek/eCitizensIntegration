@@ -1,7 +1,11 @@
 import React, {useEffect, useState} from "react";
 import {useSearchParams} from "react-router-dom";
+import {API_URL} from '../../constants/constants'
+import {useNavigate} from "react-router-dom";
 
 function HomePage(props) {
+
+    let navigate = useNavigate();
 
     const [searchParams, setSearchParams] = useSearchParams();
     let form = searchParams.get("formData");
@@ -113,24 +117,24 @@ function HomePage(props) {
                         <h3 className="mb-0">Dodjeljivanje dopuštenja</h3>
                     </div>
                     <div className="card-body">
-                        <form className="form" method="post" role="form" action='http://localhost:8080/authorization/submit' method='post'>
+                        <form className="form" method="post" role="form" action={`${API_URL}/authorization/submit`}>
                             <div className="form-group row">
                                 <label className="col-lg-3 col-form-label form-control-label">Opunomoćitelj</label>
                                 <div className="col-lg-9">
-                                    <input className="form-control" type="text" value={state.fromEntityFirstName + ' ' + state.fromEntityLastName + ', ' + state.fromEntityOib + ', ' +  state.fromEntityLegalName} disabled/>
+                                    <input className="form-control" type="text" readOnly value={state.fromEntityFirstName + ' ' + state.fromEntityLastName + ', ' + state.fromEntityOib + ', ' +  state.fromEntityLegalName} disabled/>
                                 </div>
                             </div>
                             <div className="form-group row">
                                 <label className="col-lg-3 col-form-label form-control-label">Daje se ovlaštenje
                                     za:</label>
                                 <div className="col-lg-9">
-                                    <input className="form-control" type="text" value={state.forEntityLegalName + ', ' + state.forEntityIps } disabled />
+                                    <input className="form-control" type="text" readOnly value={state.forEntityLegalName + ', ' + state.forEntityIps } disabled />
                                 </div>
                             </div>
                             <div className="form-group row">
                                 <label className="col-lg-3 col-form-label form-control-label">Opunomoćenik</label>
                                 <div className="col-lg-9">
-                                    <input className="form-control" type="text" value={state.toEntityFirstName + ' ' + state.toEntityLastName + ', ' + state.toEntityOib + ', ' +  state.toEntityLegalName} disabled/>
+                                    <input className="form-control" type="text" readOnly value={state.toEntityFirstName + ' ' + state.toEntityLastName + ', ' + state.toEntityOib + ', ' +  state.toEntityLegalName} disabled/>
                                 </div>
                             </div>
                             <div className="form-group row">
@@ -196,7 +200,7 @@ function HomePage(props) {
                             </div>
                             <div className="form-group" style={{ display: 'flex', flexDirection: 'row', alignItems: 'flex-end', justifyContent: 'center'}}>
                                 <input className="btn btn-primary" type="submit" value="Potvrdi"/>
-                                <input className="btn btn-primary" id="cancelBtn" value="Odustani" style={{marginLeft: '4px'}}/>
+                                <input className="btn btn-primary" id="cancelBtn" value="Odustani" style={{marginLeft: '4px'}} onClick={() => { navigate("/")}}/>
                             </div>
                                 <input type='hidden' name='serviceRequestId' value={formData.serviceRequestId} />
                                 <input type='hidden' name='responseUrl' value={formData.responseUrl}  />

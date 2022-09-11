@@ -48,6 +48,8 @@ axiosInstance.interceptors.response.use(
                 }).catch( error => {
                     console.log(error)
                     originalRequest._retry=false;
+                    store.dispatch(cleanNavigationBarData());
+                    store.dispatch(cleanUserData());        
                 })
         } else if( error?.response?.data?.errorCode === ERROR_CODE_REFRESH_TOKEN_INVALID
             || error?.response?.data?.errorCode === 0) {
