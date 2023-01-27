@@ -67,7 +67,7 @@ public class AuthnRequestToken extends AbstractRequestToken {
 		request.setNameIDPolicy(requestNameIdPolicy);
 		// set conditions element
 		Conditions requestConditions = new ConditionsBuilder().buildObject();
-		requestConditions.setNotBefore(DateTime.now(DateTimeZone.UTC));
+		requestConditions.setNotBefore(DateTime.now(DateTimeZone.UTC).minusSeconds(30));
 		requestConditions.setNotOnOrAfter(DateTime.now(DateTimeZone.UTC).plusMinutes(5));
 		//set one time use
 		OneTimeUse oneUse = new OneTimeUseBuilder().buildObject();

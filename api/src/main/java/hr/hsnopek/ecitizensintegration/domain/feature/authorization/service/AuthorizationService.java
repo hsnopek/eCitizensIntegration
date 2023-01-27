@@ -198,13 +198,6 @@ public class AuthorizationService {
         if(StringUtils.isNotBlank(dn))
             authorizationUnionPermissionRequest.setCertificateDn(dn);
 
-        // Describes with what kind of authentication means user logs-in
-
-        // Bussiness certificate - parameters IPS and IZVOR_REG are user that are returned by navigation NIAS
-        // (oib is bussines subject oib from company that issued the certificate)
-        // Personal certificate - parameters ToLegalIps and ToLegalIzvor_reg are user that are returned by navigation bar
-        // ePass - element is ommited; we are checking rights for person as a citizen
-
         if(toLegalIps != null && toLegalIzvor != null) {
             JipsType toJipsType = new JipsType();
             toJipsType.setIPS(toLegalIps);
